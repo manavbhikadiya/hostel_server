@@ -95,6 +95,7 @@ router.post("/addHostel/:college_id", async (req, res) => {
     kms,
     rooms_available,
     room_price,
+    location,
   } = req.body;
 
   const college_id = req.params.college_id;
@@ -114,7 +115,8 @@ router.post("/addHostel/:college_id", async (req, res) => {
       longitudeDelta,
       kms,
       rooms_available,
-      room_price
+      room_price,
+      location,
     );
     await addHostel.save();
 

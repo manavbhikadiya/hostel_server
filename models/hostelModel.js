@@ -67,7 +67,8 @@ hostelSchema.methods.addHostels = async function (
   longitudeDelta,
   kms,
   rooms_available,
-  room_price
+  room_price,
+  location
 ) {
   try {
     this.hostels = this.hostels.concat({
@@ -83,6 +84,7 @@ hostelSchema.methods.addHostels = async function (
       kms,
       rooms_available,
       room_price,
+      location
     });
     await this.save();
     return this.hostels;
