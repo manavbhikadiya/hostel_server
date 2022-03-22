@@ -16,7 +16,7 @@ router.post("/user", async (req, res) => {
     const createUser = new User({ name, email, password, mobile });
     await createUser.save();
     if (createUser) {
-      res.status(201).send({ message: "User created" });
+      res.status(201).send(createUser);
     }
   } catch (error) {
     res.status(400).send({ message: error });
@@ -30,7 +30,7 @@ router.post("/login/:email", async (req, res) => {
     const userExist = await User.findOne({ email: email });
 
     if (userExist.password == password) {
-      res.status(200).send({ message: "Logged in" });
+      res.status(200).send(userExist);
     } else {
       res.status(404).send({ message: "authentication failed" });
     }
