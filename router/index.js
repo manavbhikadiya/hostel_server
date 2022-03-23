@@ -3,7 +3,33 @@ const router = express.Router();
 const User = require("../models/userModel");
 const Hostel = require("../models/hostelModel");
 const upload = require("../middleware/upload");
+const nodemailer = require("nodemailer");
 const controller = require("../controllers/hostelController");
+
+const sendMail = (email, password) => {
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "manavbhikadiya@gmail.com",
+      pass: "6354327745",
+    },
+  });
+
+  var mailOptions = {
+    from: "manavbhikadiya@gmail.com",
+    to: email,
+    subject: "donot reply",
+    text: `your pasword is ${password}`,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+};
 
 router.post("/user", async (req, res) => {
   const { name, email, password, mobile } = req.body;
@@ -116,7 +142,7 @@ router.post("/addHostel/:college_id", async (req, res) => {
       kms,
       rooms_available,
       room_price,
-      location,
+      location
     );
     await addHostel.save();
 
@@ -126,8 +152,29 @@ router.post("/addHostel/:college_id", async (req, res) => {
   }
 });
 
+router.post("/forgotpassword/:email", async (req, res) => {
+  const email = req.params.email;
+  if(!email){
+    res.status(404).send({message:"Email field is mandatory"});
+  }
+  try {
+    const userExist = await User.findOne({ email: email });
+    if (userExist) {
+      sendMail(email, userExist.password);
+      res.status(200).send({ message: "Password sent successfully" });
+    } else {
+      res.status(400).send({ message: "You have provide wrong email" });
+    }
+  } catch (error) {
+    res.status(400).send({ message: error });
+  }
+});
+
 router.get("/hostels", controller.getAllHostels);
 router.get("/getFavouritehostel/:user_id", controller.getFavouriteHostels);
-router.get('/getHostelDetails/:college_id/:hostel_id',controller.getHostelDetails);
+router.get(
+  "/getHostelDetails/:college_id/:hostel_id",
+  controller.getHostelDetails
+);
 
 module.exports = router;
