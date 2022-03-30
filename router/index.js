@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
 const Hostel = require("../models/hostelModel");
-const upload = require("../middleware/upload");
+// const upload = require("../middleware/upload");
 const nodemailer = require("nodemailer");
 const controller = require("../controllers/hostelController");
+const { uploadProfile } = require('../middleware/file')
 
 const sendMail = (email, password) => {
   var transporter = nodemailer.createTransport({
@@ -30,24 +31,6 @@ const sendMail = (email, password) => {
     }
   });
 };
-
-router.post("/user", async (req, res) => {
-  const { name, email, password, mobile } = req.body;
-
-  if (!name || !email || !password || !mobile) {
-    res.status(404).send({ message: "Every field is mandatory" });
-  }
-
-  try {
-    const createUser = new User({ name, email, password, mobile });
-    await createUser.save();
-    if (createUser) {
-      res.status(201).send(createUser);
-    }
-  } catch (error) {
-    res.status(400).send({ message: error });
-  }
-});
 
 router.post("/login/:email", async (req, res) => {
   const email = req.params.email;
@@ -90,72 +73,11 @@ router.post(
   }
 );
 
-router.post("/addCollege", async (req, res) => {
-  const { college_name, district, location } = req.body;
-  if (!college_name || !district || !location) {
-    res.status(404).send({ message: "Every field is mandatory" });
-  }
-  try {
-    const addCollege = new Hostel({ college_name, district, location });
-    await addCollege.save();
-
-    if (addCollege) {
-      res.status(201).send({ message: "College created" });
-    }
-  } catch (error) {
-    res.status(400).send({ message: error });
-  }
-});
-
-router.post("/addHostel/:college_id", async (req, res) => {
-  const {
-    boys,
-    girls,
-    hostel_name,
-    manager_name,
-    helpline_no,
-    latitude,
-    longitude,
-    latitudeDelta,
-    longitudeDelta,
-    kms,
-    rooms_available,
-    room_price,
-    location,
-  } = req.body;
-
-  const college_id = req.params.college_id;
-
-  const findCollege = await Hostel.findOne({ _id: college_id });
-
-  try {
-    const addHostel = await findCollege.addHostels(
-      boys,
-      girls,
-      hostel_name,
-      manager_name,
-      helpline_no,
-      latitude,
-      longitude,
-      latitudeDelta,
-      longitudeDelta,
-      kms,
-      rooms_available,
-      room_price,
-      location
-    );
-    await addHostel.save();
-
-    res.status(201).send({ message: "Hostel Added" });
-  } catch (error) {
-    res.status(400).send({ message: error });
-  }
-});
 
 router.post("/forgotpassword/:email", async (req, res) => {
   const email = req.params.email;
-  if(!email){
-    res.status(404).send({message:"Email field is mandatory"});
+  if (!email) {
+    res.status(404).send({ message: "Email field is mandatory" });
   }
   try {
     const userExist = await User.findOne({ email: email });
@@ -176,5 +98,7 @@ router.get(
   "/getHostelDetails/:college_id/:hostel_id",
   controller.getHostelDetails
 );
+// file uploding
+
 
 module.exports = router;

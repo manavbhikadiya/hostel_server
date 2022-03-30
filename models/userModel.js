@@ -28,6 +28,9 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+  profile: {
+    type: String,
+  },
   tokens: [
     {
       token: {
@@ -35,9 +38,6 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
-  profile: {
-    type: String,
-  },
 });
 
 userSchema.methods.addFavouriteHostel = async function (hostel_id, college_id) {
