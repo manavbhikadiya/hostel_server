@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({extended : false}))
 
 app.use('/user', upload)
 app.use('/college', collegeRouter)
-app.use("/add", addingHostel)
+app.use("/hostel", addingHostel)
 app.use(router);
 
 app.get("/", (req, res) => {

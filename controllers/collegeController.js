@@ -42,7 +42,7 @@ exports.updateCollge = async (req, res) => {
         })
 }
 
-exports.deleteUser = async(req, res) => {                                               
+exports.deleteCollege = async(req, res) => {                                               
     const id = req.params.id;
 try {
     

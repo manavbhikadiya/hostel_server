@@ -1,5 +1,6 @@
 
 const User = require('../models/userModel')
+const fs  = require('fs')
 
 // create user
 exports.createUser = async (req, res) => {
@@ -78,21 +79,27 @@ exports.uploadProfileController = async (req, res) => {
 // update user
 exports.updateUser = async (req, res) => {
   const { name, email, password, mobile } = req.body;
+  if (req.file) {
+    function base64_encode(file) {
+      var bitmap = fs.readFileSync(file);
+      return new Buffer(bitmap).toString('base64');
+    }
+    var base64Str = base64_encode(req.file.path)
+    var url = `data:${req.file.mimetype};base64,${base64Str}`
+  }
 
   try {
-    await User.findByIdAndUpdate({ _id: req.params.id }, { $set: { email: email, name: name, password: password, mobile: mobile } })
-    .then((value) => {
-      console.log(value);
-      if(value){
-
-        res.send({success : true, message : "User Updated"})
-      }else{
-res.send({success : false, message : "invalid user"})
-      }
-    })
-    .catch(e => {
-      res.send({success : false, err  : "invalid id"})
-    })
+    await User.findByIdAndUpdate({ _id: req.params.id }, { $set: { email: email, name: name, password: password, mobile: mobile, profile: url } })
+      .then((value) => {
+        if (value) {
+          res.send({ success: true, message: "User Updated" })
+        } else {
+          res.send({ success: false, message: "invalid user" })
+        }
+      })
+      .catch(e => {
+        res.send({ success: false, err: "invalid id" })
+      })
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
@@ -101,19 +108,19 @@ res.send({success : false, message : "invalid user"})
 // delete user
 exports.deleteUser = async (req, res) => {
   try {
- await User.findByIdAndDelete({ _id: req.params.id })
- .then((value) => {
-  console.log(value);
-  if(value){
+    await User.findByIdAndDelete({ _id: req.params.id })
+      .then((value) => {
+        console.log(value);
+        if (value) {
 
-    res.send({success : true, message : "User Updated"})
-  }else{
-res.send({success : false, message : "invalid user"})
-  }
-})
-.catch(e => {
-  res.send({success : false, err  : "invalid id"})
-})
+          res.send({ success: true, message: "User Updated" })
+        } else {
+          res.send({ success: false, message: "invalid user" })
+        }
+      })
+      .catch(e => {
+        res.send({ success: false, err: "invalid id" })
+      })
   } catch (error) {
     res.status(400).send({ message: error.message });
   }

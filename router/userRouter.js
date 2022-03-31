@@ -8,7 +8,7 @@ route.post('/', createUser)
 
 route.post('/upload',uploadProfile.single("profile"), uploadProfileController)
 
-route.post('/update/:id', updateUser)
+route.post('/update/:id', uploadProfile.single("profile"), updateUser)
 
 route.post('/delete/:id', deleteUser)
 
