@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
 const Hostel = require("../models/hostelModel");
-// const upload = require("../middleware/upload");
 const nodemailer = require("nodemailer");
 const controller = require("../controllers/hostelController");
 const { uploadProfile } = require('../middleware/file')
@@ -93,12 +92,11 @@ router.post("/forgotpassword/:email", async (req, res) => {
 });
 
 router.get("/hostels", controller.getAllHostels);
+router.get("/hostels/:college_id",controller.getAllHostelsOfCollege);
 router.get("/getFavouritehostel/:user_id", controller.getFavouriteHostels);
 router.get(
   "/getHostelDetails/:college_id/:hostel_id",
   controller.getHostelDetails
 );
-// file uploding
-
 
 module.exports = router;

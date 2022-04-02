@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require('cors');
 const router = require("./router/index")
 const bodyParser = require('body-parser')
-const upload = require('./router/userRouter')
+const createUser = require('./router/userRouter')
 const addingHostel = require('./router/addHostel')
 const collegeRouter = require('./router/collegeRouter')
 const db = require("./db/db");
@@ -19,7 +19,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended : false}))
 
 
-app.use('/user', upload)
+app.use('/user', createUser);
 app.use('/college', collegeRouter)
 app.use("/hostel", addingHostel)
 app.use(router);

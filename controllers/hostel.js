@@ -31,7 +31,7 @@ exports.addHostel = async (req, res) => {
     var url = `data:${req.file.mimetype};base64,${base64Str}`
   }
   const findCollege = await Hostel.findOne({ _id: college_id });
-  let image = url
+  let hostel_image = url
   try {
     await findCollege.addHostels(
       boys,
@@ -47,7 +47,7 @@ exports.addHostel = async (req, res) => {
       rooms_available,
       room_price,
       location,
-      image
+      hostel_image
     );
     res.status(201).send({ message: "Hostel Added" });
   } catch (error) {

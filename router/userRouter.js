@@ -6,7 +6,7 @@ const {uploadProfile} = require('../middleware/file')
 
 route.post('/', createUser)
 
-route.post('/upload',uploadProfile.single("profile"), uploadProfileController)
+route.post('/upload/:id',uploadProfile.single("profile"), uploadProfileController)
 
 route.post('/update/:id', uploadProfile.single("profile"), updateUser)
 

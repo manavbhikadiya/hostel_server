@@ -47,4 +47,15 @@ const getHostelDetails = (req, res) => {
     });
 };
 
-module.exports = { getAllHostels, getFavouriteHostels, getHostelDetails };
+const getAllHostelsOfCollege = (req,res) => {
+  const college_id = req.params.college_id;
+  Hostel.find({_id:college_id})
+    .then((hostels) => {
+      res.send(hostels);
+    })
+    .catch(() => {
+      res.status(404).send({ message: "Unable to find" });
+    });
+}
+
+module.exports = { getAllHostels, getFavouriteHostels, getHostelDetails,getAllHostelsOfCollege };

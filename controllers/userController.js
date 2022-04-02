@@ -1,18 +1,24 @@
 
 const User = require('../models/userModel')
-const fs  = require('fs')
+const fs = require('fs')
 
 // create user
 exports.createUser = async (req, res) => {
-  const { name, email, password, mobile, profile } = req.body;
+  const { name, email, password, mobile } = req.body;
 
   if (!name || !email || !password || !mobile) {
     res.status(404).send({ message: "Every field is mandatory" });
   }
 
   try {
-    const createUser = new User({ name, email, password, mobile, profile });
-    // console.log( req.body);
+
+    const userExist = await User.findOne({ email: email });
+
+    if (userExist) {
+      res.status(400).send({message:"Email already exist"});
+    }
+
+    const createUser = new User({ name, email, password, mobile });
     await createUser.save();
     if (createUser) {
       res.status(201).send(createUser);
@@ -25,10 +31,8 @@ exports.createUser = async (req, res) => {
 
 // image uploding
 exports.uploadProfileController = async (req, res) => {
-  const { id } = req.body;
-  if (!id) {
-    res.send("Id is required!!")
-  }
+  
+  const id = req.params.id;
 
   // file uploding
   if (req.file) {
