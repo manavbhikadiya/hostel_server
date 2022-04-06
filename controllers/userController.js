@@ -1,6 +1,32 @@
 
 const User = require('../models/userModel')
 const fs = require('fs')
+const nodemailer = require("nodemailer");
+
+const sendMail = (email, password) => {
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "manavbhikadiya@gmail.com",
+      pass: "6354327745",
+    },
+  });
+
+  var mailOptions = {
+    from: "manavbhikadiya@gmail.com",
+    to: email,
+    subject: "donot reply",
+    text: `your pasword is ${password}`,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+};
 
 // create user
 exports.createUser = async (req, res) => {
@@ -27,6 +53,62 @@ exports.createUser = async (req, res) => {
     console.log(req.body);
     res.status(400).send({ message: error });
   }
+}
+
+exports.loginUser = async(req,res) =>{
+  const email = req.params.email;
+  const { password } = req.body;
+  try {
+    const userExist = await User.findOne({ email: email });
+
+    if (userExist.password == password) {
+      res.status(200).send(userExist);
+    } else {
+      res.status(404).send({ message: "authentication failed" });
+    }
+  } catch (error) {
+    res.status(404).send({ message: "User not found" });
+  }
+}
+
+exports.forgotPassword = async(req,res) =>{
+  const email = req.params.email;
+  if (!email) {
+    res.status(404).send({ message: "Email field is mandatory" });
+  }
+  try {
+    const userExist = await User.findOne({ email: email });
+    if (userExist) {
+      // sendMail(email, userExist.password);
+      res.status(200).send({ message: "Password sent successfully" });
+    } else {
+      res.status(400).send({ message: "You have provide wrong email" });
+    }
+  } catch (error) {
+    res.status(400).send({ message: error });
+  }
+}
+
+exports.addFavouriteHostel = async(req,res) =>{
+  const user_id = req.params.user_id;
+    const hostel_id = req.params.hostel_id;
+    const college_id = req.params.college_id;
+
+    const userFind = await User.findOne({ _id: user_id });
+
+    try {
+      const favHostel = await userFind.addFavouriteHostel(
+        hostel_id,
+        college_id
+      );
+      await favHostel.save();
+
+      if (favHostel) {
+        res.status(201).send({ message: "Added to favourite" });
+      }
+    } catch (error) {
+      res.status(400).send({ message: error });
+    }
 }
 
 // image uploding
