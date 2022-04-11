@@ -1,6 +1,7 @@
 const Admin = require("../models/adminModel");
 
 exports.registerAdmin = async (req, res) => {
+
   const { name, email, username, password } = req.body;
 
   if (!name || !email || !username || !password) {
@@ -10,7 +11,7 @@ exports.registerAdmin = async (req, res) => {
   try {
     const adminExist = await Admin.find({ username });
     if (adminExist.length != 0) {
-      res.status(400).send({message:"Username or Email is already taken"})
+      res.status(400).send({ message: "Username or Email is already taken" })
     } else {
       const createAdmin = new Admin({ name, email, username, password });
       await createAdmin.save();

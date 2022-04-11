@@ -3,7 +3,7 @@ const User = require('../models/userModel');
 
 var fs = require('fs');
 
-exports.getAllHostels = async (req,res) =>{
+exports.getAllHostels = async (req, res) => {
   Hostel.find()
     .then((hostels) => {
       res.send(hostels);
@@ -13,9 +13,9 @@ exports.getAllHostels = async (req,res) =>{
     });
 }
 
-exports.getAllHostelsOfCollege = async (req,res) =>{
+exports.getAllHostelsOfCollege = async (req, res) => {
   const college_id = req.params.college_id;
-  Hostel.find({_id:college_id})
+  Hostel.find({ _id: college_id })
     .then((hostels) => {
       res.send(hostels);
     })
@@ -24,23 +24,23 @@ exports.getAllHostelsOfCollege = async (req,res) =>{
     });
 }
 
-exports.getHostelDetails = async (req,res) =>{
+exports.getHostelDetails = async (req, res) => {
   const college_id = req.params.college_id;
   const hostel_id = req.params.hostel_id;
-  Hostel.findOne({_id:college_id})
-  .then((colleges) => {
-    colleges.hostels.map((val)=>{
-        if(val._id == hostel_id){
-            res.send(val);
+  Hostel.findOne({ _id: college_id })
+    .then((colleges) => {
+      colleges.hostels.map((val) => {
+        if (val._id == hostel_id) {
+          res.send(val);
         }
+      })
     })
-  })
-  .catch(() => {
-    res.status(404).send({ message: "Unable to find" });
-  });
+    .catch(() => {
+      res.status(404).send({ message: "Unable to find" });
+    });
 }
 
-exports.getFavouriteHostels = async(req,res)=>{
+exports.getFavouriteHostels = async (req, res) => {
   const user_id = req.params.user_id;
   User.find({ _id: user_id })
     .then((user) => {
@@ -115,6 +115,7 @@ exports.addHostel = async (req, res) => {
 }
 
 exports.updateHostel = async (req, res) => {
+
   const {
     boys,
     girls,
@@ -129,7 +130,6 @@ exports.updateHostel = async (req, res) => {
     rooms_available,
     room_price,
     location } = req.body
-
   if (req.file) {
     function base64_encode(file) {
       var bitmap = fs.readFileSync(file);
@@ -156,7 +156,7 @@ exports.updateHostel = async (req, res) => {
     room_price: room_price,
     location: location,
     _id: id,
-    image: url
+    hostel_image: url
   }
 
   Hostel.update({ "hostels._id": id }, { "$set": { "hostels.$": newData } })
