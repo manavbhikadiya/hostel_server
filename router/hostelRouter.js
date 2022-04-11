@@ -13,7 +13,7 @@ route.get("/getFavouriteHostels/:user_id",getFavouriteHostels);
 
 
 // hostel adder
-route.post("/add/:college_id", uploadProfile.single('hostel_image'), addHostel);
+route.post("/addHostel/:college_id", uploadProfile.single('hostel_image'), addHostel);
 
 // hostel modifier
 route.post('/update/:id', uploadProfile.single('hostel_image'), updateHostel)

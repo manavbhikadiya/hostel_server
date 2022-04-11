@@ -10,7 +10,7 @@ exports.addCollege = async (req, res) => {
         await addCollege.save();
 
         if (addCollege) {
-            res.status(201).send({ message: "College created" });
+            res.status(201).send(addCollege);
         }
     } catch (error) {
         res.status(400).send({ message: error });
