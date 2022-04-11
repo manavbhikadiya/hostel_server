@@ -1,7 +1,9 @@
+const Admin = require('../models/adminModel');
 const Hostel = require('../models/hostelModel')
 
 exports.addCollege = async (req, res) => {
     const { college_name, district, location } = req.body;
+    const admin_id = req.params.admin_id;
     if (!college_name || !district || !location) {
         res.status(404).send({ message: "Every field is mandatory" });
     }
@@ -10,6 +12,7 @@ exports.addCollege = async (req, res) => {
         await addCollege.save();
 
         if (addCollege) {
+            await Admin.findByIdAndUpdate({_id:admin_id},{college_id:addCollege._id});
             res.status(201).send(addCollege);
         }
     } catch (error) {
