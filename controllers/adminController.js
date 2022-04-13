@@ -46,3 +46,8 @@ exports.loginAdmin = async (req, res) => {
     res.status(400).send({ message: error });
   }
 };
+
+exports.logoutAdmin = (req,res) =>{
+  res.clearCookie('jwtoken');
+  res.status(200).send("user logged out");
+}
