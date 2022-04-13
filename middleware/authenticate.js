@@ -16,7 +16,6 @@ const authenticate = async (req, res, next) => {
         req.token = token;
         req.rootAdmin = rootAdmin; 
         req.userId = rootAdmin._id;
-        console.log(rootAdmin);
         next();
     } catch (error) {
         res.status(401).send({message:"Un Authorized: token expire"})
