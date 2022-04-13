@@ -1,0 +1,20 @@
+[{
+  "_id": {
+    "$oid": "624d376d42090f4a540969f5"
+  },
+  "name": "Admin",
+  "email": "admin@gmail.com",
+  "username": "admin",
+  "password": "admin123",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6253d8e7f04b6e87c4a0bd1e"
+  },
+  "name": "manav",
+  "email": "manav@gmail.com",
+  "username": "manav",
+  "password": "manav123",
+  "__v": 0,
+  "college_id": "6253d8f2f04b6e87c4a0bd20"
+}]

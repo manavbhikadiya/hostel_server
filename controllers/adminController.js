@@ -1,7 +1,6 @@
 const Admin = require("../models/adminModel");
 
 exports.registerAdmin = async (req, res) => {
-
   const { name, email, username, password } = req.body;
 
   if (!name || !email || !username || !password) {
@@ -11,7 +10,7 @@ exports.registerAdmin = async (req, res) => {
   try {
     const adminExist = await Admin.find({ username });
     if (adminExist.length != 0) {
-      res.status(400).send({ message: "Username or Email is already taken" })
+      res.status(400).send({ message: "Username or Email is already taken" });
     } else {
       const createAdmin = new Admin({ name, email, username, password });
       await createAdmin.save();
@@ -30,11 +29,15 @@ exports.loginAdmin = async (req, res) => {
     res.status(404).send({ message: "Every field is mandatory" });
   }
   try {
-    const adminExist = await Admin.find({
+    const adminExist = await Admin.findOne({
       username: username,
-      password: password,
     });
-    if (adminExist.length < 2 && adminExist.length != 0) {
+    if (adminExist.password === password) {
+      const token = await adminExist.generateAuthToken();
+      res.cookie("jwtoken", token, {
+        expires: new Date(Date.now() + 2598000000),
+        httpOnly: true,
+      });
       res.status(200).send(adminExist);
     } else {
       res.status(404).send({ message: "username or password is wrong" });

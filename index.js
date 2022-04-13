@@ -6,10 +6,11 @@ const createUser = require('./router/userRouter')
 const hostelRouter = require('./router/hostelRouter')
 const collegeRouter = require('./router/collegeRouter')
 const adminRouter  = require('./router/adminRouter');
-
+var cookieParser = require('cookie-parser')
 const db = require("./db/db");
 
 const app = express();
+app.use(cookieParser())
 const PORT = 8000 || process.env.PORT;
 
 app.use(cors());
